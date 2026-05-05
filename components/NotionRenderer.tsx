@@ -46,7 +46,6 @@ function renderRichText(richText: RichText[]): React.ReactNode {
 type GroupedItem = any | { type: 'numbered_list'; items: any[] } | { type: 'bulleted_list'; items: any[] }
 
 export default function NotionRenderer({ blocks }: { blocks: any[] }) {
-  // Group consecutive list items into a single list
   const grouped: GroupedItem[] = []
   let current: any = null
 
@@ -109,19 +108,19 @@ function Block({ block }: { block: GroupedItem }) {
     }
     case 'heading_1':
       return (
-        <h2 className="font-serif text-3xl mt-16 mb-4 leading-tight tracking-tight">
+        <h2 className="font-serif text-3xl md:text-4xl mt-16 mb-5 leading-tight tracking-tight">
           {renderRichText(block.heading_1.rich_text)}
         </h2>
       )
     case 'heading_2':
       return (
-        <h3 className="font-serif text-2xl mt-12 mb-3 leading-tight tracking-tight">
+        <h3 className="font-serif text-2xl md:text-3xl mt-14 mb-4 leading-tight tracking-tight">
           {renderRichText(block.heading_2.rich_text)}
         </h3>
       )
     case 'heading_3':
       return (
-        <h4 className="smallcaps text-sm mt-10 mb-2 text-ink-muted">
+        <h4 className="font-serif italic text-xl md:text-2xl mt-12 mb-3 text-ink leading-tight">
           {renderRichText(block.heading_3.rich_text)}
         </h4>
       )
@@ -173,7 +172,7 @@ function Block({ block }: { block: GroupedItem }) {
       const hasColumnHeader = block.table?.has_column_header
       return (
         <div className="my-12 -mx-6 md:mx-0 overflow-x-auto">
-          <table className="w-full border-collapse text-sm">
+          <table className="w-full border-collapse">
             <tbody>
               {rows.map((row: any, rowIdx: number) => {
                 const cells = row.table_row?.cells || []
@@ -183,7 +182,7 @@ function Block({ block }: { block: GroupedItem }) {
                     key={row.id}
                     className={
                       isHeader
-                        ? 'border-b border-ink'
+                        ? 'border-b-2 border-ink'
                         : 'border-b border-line/60 last:border-b-0'
                     }
                   >
@@ -191,14 +190,14 @@ function Block({ block }: { block: GroupedItem }) {
                       isHeader ? (
                         <th
                           key={cellIdx}
-                          className="px-4 py-3 text-left align-top smallcaps text-xs text-ink-muted font-normal"
+                          className="px-4 py-3 text-left align-top font-serif italic text-base md:text-lg text-ink font-normal"
                         >
                           {renderRichText(cell)}
                         </th>
                       ) : (
                         <td
                           key={cellIdx}
-                          className="px-4 py-3 text-left align-top leading-relaxed"
+                          className="px-4 py-3 text-left align-top leading-relaxed text-base"
                         >
                           {renderRichText(cell)}
                         </td>
