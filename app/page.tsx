@@ -23,7 +23,7 @@ export default async function Home() {
         </p>
         <div className="mt-12 flex items-center gap-4">
           <div className="h-px w-12 bg-ink"></div>
-          <span className="smallcaps text-xs text-ink-muted">
+          <span className="smallcaps text-sm text-ink-muted">
             {total === 0 ? 'Coming soon' : `${total} ${total === 1 ? 'entry' : 'entries'}`}
           </span>
         </div>
@@ -38,10 +38,10 @@ export default async function Home() {
             <article key={post.id} className="group">
               <Link href={`/posts/${post.slug}`} className="block">
                 <div className="flex items-baseline gap-6 mb-4">
-                  <span className="smallcaps text-xs text-ink-muted">
+                  <span className="smallcaps text-sm text-ink-muted">
                     {formatDate(post.date)}
                   </span>
-                  <span className="smallcaps text-xs text-ink-muted">
+                  <span className="smallcaps text-sm text-ink-muted">
                     №&nbsp;{String(total - idx).padStart(3, '0')}
                   </span>
                 </div>
@@ -67,7 +67,7 @@ export default async function Home() {
                     {post.excerpt}
                   </p>
                 )}
-                <div className="mt-6 inline-block smallcaps text-xs border-b border-ink pb-0.5 transition-opacity group-hover:opacity-50">
+                <div className="mt-6 inline-block smallcaps text-sm border-b border-ink pb-0.5 transition-opacity group-hover:opacity-50">
                   Read entry
                 </div>
               </Link>
@@ -78,7 +78,7 @@ export default async function Home() {
 
       {/* Footer */}
       <footer className="mt-32 pt-8 border-t border-line">
-        <p className="smallcaps text-xs text-ink-muted">
+        <p className="smallcaps text-sm text-ink-muted">
           A build-in-public learning project · {new Date().getFullYear()}
         </p>
       </footer>
