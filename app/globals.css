@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --paper: #FAF7F2;
+  --ink: #1C1B17;
+  --ink-muted: #6B6862;
+  --line: #E8E3D9;
+}
+
+html,
+body {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+body {
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-feature-settings: 'ss01' on, 'ss02' on, 'liga' on;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.smallcaps {
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.08em;
+}
+
+/* Numbered observation list with editorial-style numbering */
+.numbered-list {
+  counter-reset: item;
+  list-style: none;
+  padding: 0;
+}
+
+.numbered-list > li {
+  counter-increment: item;
+  padding-left: 3rem;
+  position: relative;
+  line-height: 1.7;
+  font-size: 1.125rem;
+}
+
+.numbered-list > li::before {
+  content: counter(item, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0.45rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  font-variant-caps: all-small-caps;
+  color: var(--ink-muted);
+}
+
+.bulleted-list {
+  list-style: none;
+  padding: 0;
+}
+
+.bulleted-list > li {
+  padding-left: 1.5rem;
+  position: relative;
+  line-height: 1.7;
+  font-size: 1.125rem;
+}
+
+.bulleted-list > li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--ink-muted);
+}
+
+/* Subtle drop cap option for first paragraph */
+.drop-cap::first-letter {
+  font-size: 4.5rem;
+  line-height: 0.85;
+  float: left;
+  margin-right: 0.5rem;
+  margin-top: 0.4rem;
+  font-weight: 400;
+  font-feature-settings: 'ss01' on;
+}
+
+/* Image fade-in on load */
+img {
+  transition: opacity 0.3s ease;
+}
