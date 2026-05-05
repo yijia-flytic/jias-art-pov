@@ -13,19 +13,20 @@ interface RichText {
 }
 
 function renderRichText(richText: RichText[]): React.ReactNode {
+  if (!richText || !richText.length) return null
   return richText.map((text, idx) => {
     let element: React.ReactNode = text.plain_text
-    if (text.annotations.code) {
+    if (text.annotations?.code) {
       element = (
         <code className="font-mono text-[0.9em] bg-line/40 px-1.5 py-0.5 rounded">
           {element}
         </code>
       )
     }
-    if (text.annotations.bold) element = <strong>{element}</strong>
-    if (text.annotations.italic) element = <em>{element}</em>
-    if (text.annotations.strikethrough) element = <s>{element}</s>
-    if (text.annotations.underline) element = <u>{element}</u>
+    if (text.annotations?.bold) element = <strong>{element}</strong>
+    if (text.annotations?.italic) element = <em>{element}</em>
+    if (text.annotations?.strikethrough) element = <s>{element}</s>
+    if (text.annotations?.underline) element = <u>{element}</u>
     if (text.href) {
       element = (
         <a
@@ -165,6 +166,63 @@ function Block({ block }: { block: GroupedItem }) {
             {block.code.rich_text.map((t: any) => t.plain_text).join('')}
           </code>
         </pre>
+      )
+    case 'table': {
+      const rows = block.children || []
+      if (!rows.length) return null
+      const hasColumnHeader = block.table?.has_column_header
+      return (
+        <div className="my-12 -mx-6 md:mx-0 overflow-x-auto">
+          <table className="w-full border-collapse text-sm">
+            <tbody>
+              {rows.map((row: any, rowIdx: number) => {
+                const cells = row.table_row?.cells || []
+                const isHeader = hasColumnHeader && rowIdx === 0
+                return (
+                  <tr
+                    key={row.id}
+                    className={
+                      isHeader
+                        ? 'border-b border-ink'
+                        : 'border-b border-line/60 last:border-b-0'
+                    }
+                  >
+                    {cells.map((cell: RichText[], cellIdx: number) =>
+                      isHeader ? (
+                        <th
+                          key={cellIdx}
+                          className="px-4 py-3 text-left align-top smallcaps text-xs text-ink-muted font-normal"
+                        >
+                          {renderRichText(cell)}
+                        </th>
+                      ) : (
+                        <td
+                          key={cellIdx}
+                          className="px-4 py-3 text-left align-top leading-relaxed"
+                        >
+                          {renderRichText(cell)}
+                        </td>
+                      )
+                    )}
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+      )
+    }
+    case 'column_list':
+      return (
+        <div className="my-8 grid gap-6 md:grid-cols-2">
+          {(block.children || []).map((col: any) => (
+            <div key={col.id}>
+              {(col.children || []).map((child: any, idx: number) => (
+                <Block key={idx} block={child} />
+              ))}
+            </div>
+          ))}
+        </div>
       )
     default:
       return null

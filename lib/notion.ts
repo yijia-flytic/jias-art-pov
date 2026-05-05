@@ -7,6 +7,9 @@ const notion = new Client({
 
 const databaseId = process.env.NOTION_DATABASE_ID || ''
 
+// Block types whose children we need to fetch recursively (for rendering)
+const BLOCKS_WITH_RENDERED_CHILDREN = ['table', 'column_list', 'column']
+
 /**
  * Fetch all published posts, sorted by Date descending.
  */
@@ -64,6 +67,7 @@ export async function getPostBySlug(slug: string): Promise<PostWithContent | nul
 
 /**
  * Fetch all blocks for a page, paginating until done.
+ * Recursively fetches children for blocks that need them for rendering (e.g. tables).
  */
 async function getAllBlocks(blockId: string): Promise<any[]> {
   const blocks: any[] = []
@@ -78,6 +82,13 @@ async function getAllBlocks(blockId: string): Promise<any[]> {
     blocks.push(...response.results)
     if (!response.has_more) break
     cursor = response.next_cursor || undefined
+  }
+
+  // For blocks that have rendered children (table rows, columns), fetch them
+  for (const block of blocks) {
+    if (block.has_children && BLOCKS_WITH_RENDERED_CHILDREN.includes(block.type)) {
+      block.children = await getAllBlocks(block.id)
+    }
   }
 
   return blocks
